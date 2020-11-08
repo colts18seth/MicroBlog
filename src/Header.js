@@ -6,12 +6,8 @@ function Header() {
             <div className="jumbotron">
                 <h1 className="display-1">MicroBlog</h1>
                 <p className="lead">Welcome to my Blog!</p>
-                <Link to='/'>
-                    Blog
-                </Link>
-                <Link to='/new' className='pl-4'>
-                    Add a new Post
-                </Link>
+                <Link to='/'>Blog</Link>
+                <Link to='/new' className='pl-4'>Add a new Post</Link>
             </div>
         </div>
     );

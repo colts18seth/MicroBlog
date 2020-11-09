@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { v4 as uuid } from 'uuid';
 import PostForm from './PostForm';
 import './BlogDetails.css';
+import { useSelector } from 'react-redux';
 
-function BlogDetails({ blogList, removePost, editPost, handleComment }) {
-    const { id } = useParams();
-    const blog = blogList.filter(blog => blog.id === id)[0];
+function BlogDetails() {
+    const { posts } = useSelector(s => ({ posts: s.posts }));
+    const { key } = useParams();
+    const blog = posts[key];
 
     const [showForm, setShowForm] = useState(false);
     const [comment, setComment] = useState("");
@@ -19,11 +21,10 @@ function BlogDetails({ blogList, removePost, editPost, handleComment }) {
     const toggleForm = () => {
         setShowForm(!showForm);
     };
-
     return (
         < div className="BlogDetails" >
             {!showForm ?
-                <div key={blog.id} className="container">
+                <div className="container">
                     <div className="d-flex justify-content-between">
                         <h3>{blog.title}</h3>
                         <div className="icons d-flex flex-row">
@@ -33,7 +34,7 @@ function BlogDetails({ blogList, removePost, editPost, handleComment }) {
                                     <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                 </svg>
                             </div>
-                            <div onClick={() => removePost(blog.id)}>
+                            <div >
                                 <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                 </svg>
@@ -43,26 +44,23 @@ function BlogDetails({ blogList, removePost, editPost, handleComment }) {
                     <p className="mb-3"><em>{blog.description}</em></p>
                     <p>{blog.body}</p>
                 </div> :
-                <PostForm edit={blog} editPost={editPost} />
+                <PostForm edit={blog} />
             }
             <hr />
             <div className="container">
                 <h4 className="mb-4">Comments</h4>
                 <ul>
-                    {blog.comments.map(c => (
-                        <li key={uuid()} className="d-flex">{c.comment}<span onClick={(e) => handleComment(e, "delete", id, c.id)}>
+                    {/* {blog.comments.map(c => (
+                        <li key={uuid()} className="d-flex">{c.comment}<span>
                             <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                             </svg>
                         </span></li>
-                    ))}
+                    ))} */}
                 </ul>
                 <div>
                     <input name="comment" onChange={handleChange} value={comment} placeholder="Add Comment"></input>
-                    <button onClick={(e) => {
-                        handleComment(e, 'add', id, { comment: comment, id: uuid() })
-                        setComment("");
-                    }} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
+                    <button type="button" className="btn btn-primary btn-sm ml-2">Add</button>
                 </div>
             </div>
         </div >

@@ -1,68 +1,65 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+import { ADD_POST, EDIT_POST } from './actionTypes';
 
-function PostForm({ addPost, edit, editPost }) {
-    let INITIAL_STATE;
-
-    if (edit) {
-        INITIAL_STATE = {
-            id: edit.id,
-            title: edit.title,
-            description: edit.description,
-            body: edit.body,
-            comments: edit.comments || null
-        }
-    } else {
+function PostForm({ edit }) {
+    let INITIAL_STATE = "";
+    if (!edit) {
         INITIAL_STATE = {
             title: "",
             description: "",
-            body: "",
-            comments: []
-        };
+            body: ""
+        }
+    } else {
+        INITIAL_STATE = {
+            title: edit.title,
+            description: edit.description,
+            body: edit.body
+        }
     }
-
     const [formData, setFormData] = useState(INITIAL_STATE);
-
+    const dispatch = useDispatch();
     const history = useHistory();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(data => ({
-            ...data,
-            [name]: value
-        }));
-    };
+        setFormData(data => ({ ...data, [name]: value }));
+    }
 
-    const handleButton = (e) => {
-        e.preventDefault();
-        if (e.target.type !== "button") {
-            if (edit) {
-                editPost(edit.id, formData);
-            } else {
-                addPost(formData);
-            }
+    const addPost = () => {
+        if (!edit) {
+            formData.key = uuid();
+            dispatch({
+                type: ADD_POST,
+                payload: formData
+            })
+            setFormData(INITIAL_STATE);
+        } else {
+            //! finish with edit logic
         }
         history.push("/");
     }
 
     return (
         <div className="PostForm">
-            <form className="container" onSubmit={handleButton} >
-                <h1 className="pb-4">New Post</h1>
+            <form className="container" >
+                <h1 className="pb-4">{!edit ? "New Post" : "Edit Post"}</h1>
                 <div className="form-group">
                     <label htmlFor="title">Title:</label>
-                    <input className="form-control" id="title" name="title" value={formData.title} onChange={handleChange} />
+                    <input onChange={handleChange} value={formData.title} className="form-control" id="title" name="title" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="description">Description:</label>
-                    <input className="form-control" id="description" name="description" value={formData.description} onChange={handleChange} />
+                    <input onChange={handleChange} value={formData.description} className="form-control" id="description" name="description" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="body">Body:</label>
-                    <textarea className="form-control" id="body" rows="5" name="body" value={formData.body} onChange={handleChange} />
+                    <textarea onChange={handleChange} value={formData.body} className="form-control" id="body" rows="5" name="body" />
                 </div>
-                <button type="submit" className="btn btn-primary">Save</button>
-                <button onClick={handleButton} type="button" className="btn btn-secondary ml-2">Cancel</button>
+                <button onClick={addPost} type="button" className="btn btn-primary">Save</button>
+                <button onClick={() => history.push('/')} type="button" className="btn btn-secondary ml-2">Cancel</button>
             </form>
         </div>
     );

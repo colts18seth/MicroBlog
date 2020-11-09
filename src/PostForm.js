@@ -5,21 +5,30 @@ import { v4 as uuid } from 'uuid';
 import { ADD_POST, EDIT_POST } from './actionTypes';
 
 function PostForm({ edit }) {
-    let INITIAL_STATE = "";
-    if (!edit) {
-        INITIAL_STATE = {
-            title: "",
-            description: "",
-            body: ""
-        }
-    } else {
-        INITIAL_STATE = {
+    const INITIAL_STATE = {
+        title: "",
+        description: "",
+        body: ""
+    }
+
+    let EDIT_INITIAL_STATE;
+    if (edit) {
+        EDIT_INITIAL_STATE = {
             title: edit.title,
             description: edit.description,
-            body: edit.body
+            body: edit.body,
+            key: edit.key
         }
     }
-    const [formData, setFormData] = useState(INITIAL_STATE);
+
+    let startState;
+    if (!edit) {
+        startState = INITIAL_STATE;
+    } else {
+        startState = EDIT_INITIAL_STATE;
+    }
+
+    const [formData, setFormData] = useState(startState);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -37,7 +46,11 @@ function PostForm({ edit }) {
             })
             setFormData(INITIAL_STATE);
         } else {
-            //! finish with edit logic
+            dispatch({
+                type: EDIT_POST,
+                payload: formData
+            })
+            setFormData(INITIAL_STATE);
         }
         history.push("/");
     }

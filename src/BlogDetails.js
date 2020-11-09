@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { useParams } from "react-router-dom";
-import { v4 as uuid } from 'uuid';
+import { useParams, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { DELETE_POST } from './actionTypes';
 import PostForm from './PostForm';
 import './BlogDetails.css';
-import { useSelector } from 'react-redux';
 
 function BlogDetails() {
     const { posts } = useSelector(s => ({ posts: s.posts }));
+    const dispatch = useDispatch();
+    const history = useHistory();
     const { key } = useParams();
     const blog = posts[key];
 
@@ -21,6 +23,15 @@ function BlogDetails() {
     const toggleForm = () => {
         setShowForm(!showForm);
     };
+
+    const removePost = () => {
+        dispatch({
+            type: DELETE_POST,
+            payload: blog.key
+        })
+        history.push("/");
+    }
+
     return (
         < div className="BlogDetails" >
             {!showForm ?
@@ -34,7 +45,7 @@ function BlogDetails() {
                                     <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                                 </svg>
                             </div>
-                            <div >
+                            <div onClick={removePost}>
                                 <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                 </svg>

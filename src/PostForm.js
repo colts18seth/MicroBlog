@@ -8,7 +8,8 @@ function PostForm({ edit }) {
     const INITIAL_STATE = {
         title: "",
         description: "",
-        body: ""
+        body: "",
+        comments: []
     }
 
     let EDIT_INITIAL_STATE;
@@ -17,7 +18,8 @@ function PostForm({ edit }) {
             title: edit.title,
             description: edit.description,
             body: edit.body,
-            key: edit.key
+            key: edit.key,
+            comments: edit.comments
         }
     }
 

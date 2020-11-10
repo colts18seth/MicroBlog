@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { DELETE_POST } from './actionTypes';
+import { ADD_COMMENT, DELETE_COMMENT, DELETE_POST } from './actionTypes';
+import { v4 as uuid } from 'uuid';
 import PostForm from './PostForm';
 import './BlogDetails.css';
 
@@ -32,6 +33,33 @@ function BlogDetails() {
         history.push("/");
     }
 
+    const addComment = () => {
+        const key = uuid();
+        dispatch({
+            type: ADD_COMMENT,
+            payload: { comment, key, blog }
+        });
+        setComment('');
+    }
+
+    const removeComment = (comment) => {
+        dispatch({
+            type: DELETE_COMMENT,
+            payload: { blog, comment }
+        })
+    }
+
+    //  const handleComment = (e, action, id, data) => {
+    //     let post = blogList.filter(p => p.id === id)[0];
+    //     if (action === 'add') {
+    //         post.comments.push(data);
+    //     } else if (action === 'delete') {
+    //         const index = post.comments.findIndex(c => c.id === data);
+    //         post.comments.splice(index, 1);
+    //         e.target.parentNode.remove();
+    //     }
+    // }
+
     return (
         < div className="BlogDetails" >
             {!showForm ?
@@ -61,17 +89,20 @@ function BlogDetails() {
             <div className="container">
                 <h4 className="mb-4">Comments</h4>
                 <ul>
-                    {/* {blog.comments.map(c => (
-                        <li key={uuid()} className="d-flex">{c.comment}<span>
-                            <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                            </svg>
-                        </span></li>
-                    ))} */}
+                    {blog.comments &&
+                        blog.comments.map(c => (
+                            <li key={c.key} className="d-flex">{c.comment}
+                                <span onClick={() => removeComment(c)}>
+                                    <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </span>
+                            </li>
+                        ))}
                 </ul>
                 <div>
                     <input name="comment" onChange={handleChange} value={comment} placeholder="Add Comment"></input>
-                    <button type="button" className="btn btn-primary btn-sm ml-2">Add</button>
+                    <button onClick={addComment} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
                 </div>
             </div>
         </div >

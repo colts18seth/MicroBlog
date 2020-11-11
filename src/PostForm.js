@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { v4 as uuid } from 'uuid';
-import { ADD_POST, EDIT_POST } from './actionTypes';
+import { addPost, editPost } from './actions';
 
 function PostForm({ edit }) {
     const INITIAL_STATE = {
@@ -39,19 +39,13 @@ function PostForm({ edit }) {
         setFormData(data => ({ ...data, [name]: value }));
     }
 
-    const addPost = () => {
+    const addPostFunc = () => {
         if (!edit) {
             formData.key = uuid();
-            dispatch({
-                type: ADD_POST,
-                payload: formData
-            })
+            dispatch(addPost(formData));
             setFormData(INITIAL_STATE);
         } else {
-            dispatch({
-                type: EDIT_POST,
-                payload: formData
-            })
+            dispatch(editPost(formData));
             setFormData(INITIAL_STATE);
         }
         history.push("/");
@@ -73,7 +67,7 @@ function PostForm({ edit }) {
                     <label htmlFor="body">Body:</label>
                     <textarea onChange={handleChange} value={formData.body} className="form-control" id="body" rows="5" name="body" />
                 </div>
-                <button onClick={addPost} type="button" className="btn btn-primary">Save</button>
+                <button onClick={addPostFunc} type="button" className="btn btn-primary">Save</button>
                 <button onClick={() => history.push('/')} type="button" className="btn btn-secondary ml-2">Cancel</button>
             </form>
         </div>

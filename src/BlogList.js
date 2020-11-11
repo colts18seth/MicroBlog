@@ -1,12 +1,16 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './BlogList.css';
 function BlogList() {
-    const { posts } = useSelector(s => ({ posts: s.posts }));
-    let postsArr = [];
-    for (let key in posts) {
-        postsArr.push({ post: posts[key] })
-    }
+    // const { posts } = useSelector(s => ({ posts: s.posts }));
+    // let postsArr = [];
+    // for (let key in posts) {
+    //     postsArr.push({ post: posts[key] })
+    // }
+    useEffect(() => {
+        dispatch(getTodosFromAPI())
+    }, [dispatch]);
     return (
         <div className="BlogList row justify-content-around">
             {posts.length !== 0 ?

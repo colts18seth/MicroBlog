@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_COMMENT, DELETE_COMMENT, DELETE_POST } from './actionTypes';
+import { addComment, deletePost, deleteComment } from './actions';
 import { v4 as uuid } from 'uuid';
 import PostForm from './PostForm';
 import './BlogDetails.css';
@@ -26,27 +26,17 @@ function BlogDetails() {
     };
 
     const removePost = () => {
-        dispatch({
-            type: DELETE_POST,
-            payload: blog.key
-        })
-        history.push("/");
+        dispatch(deletePost(blog.key));
     }
 
-    const addComment = () => {
+    const addCommentFunc = () => {
         const key = uuid();
-        dispatch({
-            type: ADD_COMMENT,
-            payload: { comment, key, blog }
-        });
+        dispatch(addComment(comment, key, blog));
         setComment('');
     }
 
     const removeComment = (comment) => {
-        dispatch({
-            type: DELETE_COMMENT,
-            payload: { blog, comment }
-        })
+        dispatch(deleteComment(blog, comment))
     }
 
     return (
@@ -91,7 +81,7 @@ function BlogDetails() {
                 </ul>
                 <div>
                     <input name="comment" onChange={handleChange} value={comment} placeholder="Add Comment"></input>
-                    <button onClick={addComment} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
+                    <button onClick={addCommentFunc} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
                 </div>
             </div>
         </div >

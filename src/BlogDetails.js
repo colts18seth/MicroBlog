@@ -49,17 +49,6 @@ function BlogDetails() {
         })
     }
 
-    //  const handleComment = (e, action, id, data) => {
-    //     let post = blogList.filter(p => p.id === id)[0];
-    //     if (action === 'add') {
-    //         post.comments.push(data);
-    //     } else if (action === 'delete') {
-    //         const index = post.comments.findIndex(c => c.id === data);
-    //         post.comments.splice(index, 1);
-    //         e.target.parentNode.remove();
-    //     }
-    // }
-
     return (
         < div className="BlogDetails" >
             {!showForm ?

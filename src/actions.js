@@ -1,4 +1,10 @@
 
+function gotPosts(posts) {
+    return ({
+        type: "GET_POSTS",
+        payload: posts
+    });
+}
 
 function addPost(post) {
     return ({
@@ -30,9 +36,9 @@ function addComment(comment, key, blog) {
 
 function deleteComment(blog, comment) {
     return ({
-        type: DELETE_COMMENT,
+        type: "DELETE_COMMENT",
         payload: { blog, comment }
     })
 }
 
-export { addPost, deletePost, editPost, addComment, deleteComment };
+export { gotPosts, addPost, deletePost, editPost, addComment, deleteComment };

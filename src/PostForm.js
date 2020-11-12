@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid';
-import { addPost, editPost } from './actions';
+import { addPostCreator } from './actionCreators';
+import { editPost } from './actions';
 
 function PostForm({ edit }) {
     const INITIAL_STATE = {
@@ -41,8 +41,7 @@ function PostForm({ edit }) {
 
     const addPostFunc = () => {
         if (!edit) {
-            formData.key = uuid();
-            dispatch(addPost(formData));
+            dispatch(addPostCreator(formData));
             setFormData(INITIAL_STATE);
         } else {
             dispatch(editPost(formData));

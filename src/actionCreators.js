@@ -1,16 +1,20 @@
+import axios from 'axios';
+import { gotPosts, addPost } from './actions';
 
-const BASE_URL = "http://localhost:3000"
+const BASE_URL = "http://localhost:5000";
 
-export function getPosts() {
+function getPosts() {
     return async function (dispatch) {
         let res = await axios.get(`${BASE_URL}/api/posts`);
-        dispatch(gotPosts(res.data.posts));
+        dispatch(gotPosts(res.data));
     };
 }
 
-function gotPosts(posts) {
-    dispatch({
-        type: "LOAD_POSTS",
-        payload: posts
-    });
+function addPostCreator(data) {
+    return async function (dispatch) {
+        let res = await axios.post(`${BASE_URL}/api/posts`, data);
+        dispatch(addPost(res.data))
+    };
 }
+
+export { getPosts, addPostCreator };

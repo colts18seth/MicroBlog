@@ -1,26 +1,32 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getPosts } from './actionCreators';
 import { Link } from 'react-router-dom';
 import './BlogList.css';
+
 function BlogList() {
-    // const { posts } = useSelector(s => ({ posts: s.posts }));
-    // let postsArr = [];
-    // for (let key in posts) {
-    //     postsArr.push({ post: posts[key] })
-    // }
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        dispatch(getTodosFromAPI())
+        dispatch(getPosts())
     }, [dispatch]);
+
+    const { posts } = useSelector(s => ({ posts: s.posts }));
+    let postsArr = [];
+    for (let key in posts) {
+        postsArr.push({ post: posts[key] })
+    }
+
     return (
         <div className="BlogList row justify-content-around">
-            {posts.length !== 0 ?
-                posts.map(p => (
-                    < div key={p.id} className="col-5 p-0 mb-4" >
+            {postsArr ?
+                postsArr.map(p => (
+                    < div key={p.post.id} className="col-5 p-0 mb-4" >
                         <div className="container border border-info rounded">
-                            <Link to={`/${p.id}`}>
-                                <h3>{p.title}</h3>
+                            <Link to={`/${p.post.id}`}>
+                                <h3>{p.post.title}</h3>
                             </Link>
-                            <p className="mb-3"><em>{p.description}</em></p>
+                            <p className="mb-3"><em>{p.post.description}</em></p>
                         </div>
                     </div>
                 )) :

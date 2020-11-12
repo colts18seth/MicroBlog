@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addComment, deletePost, deleteComment } from './actions';
 import { v4 as uuid } from 'uuid';
@@ -9,9 +9,8 @@ import './BlogDetails.css';
 function BlogDetails() {
     const { posts } = useSelector(s => ({ posts: s.posts }));
     const dispatch = useDispatch();
-    const history = useHistory();
     const { key } = useParams();
-    const blog = posts[key];
+    const blog = posts[key - 1];
 
     const [showForm, setShowForm] = useState(false);
     const [comment, setComment] = useState("");

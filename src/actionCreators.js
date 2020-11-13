@@ -35,8 +35,6 @@ function deletePostCreator(id) {
     return async function (dispatch) {
         await axios.delete(`${BASE_URL}/api/posts/${id}`)
         dispatch(deletePost(id))
-        getPosts()
-        //! ?????
     }
 }
 

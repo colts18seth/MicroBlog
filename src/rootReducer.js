@@ -9,21 +9,22 @@ import {
 } from './actionTypes';
 
 const INITIAL_STATE = {
-    posts: []
+    posts: {},
+    titles: []
 }
 
 function rootReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
 
         case GET_POSTS:
+            //! change from array to object
             return { ...state, posts: action.payload }
 
         case GET_DETAILS:
             return { ...state, postDetails: action.payload }
 
         case ADD_POST:
-            state.posts.push(action.payload)
-            return { ...state }
+            return { ...state, posts: [...state.posts, action.payload] }
 
         case EDIT_POST:
             state.posts[action.payload.id - 1] = action.payload;

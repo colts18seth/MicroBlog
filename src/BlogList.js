@@ -6,12 +6,12 @@ import './BlogList.css';
 
 function BlogList() {
     const dispatch = useDispatch();
+    let { posts } = useSelector(s => ({ posts: s.posts }));
 
     useEffect(() => {
         dispatch(getPosts())
     }, [dispatch]);
 
-    const { posts } = useSelector(s => ({ posts: s.posts }));
     let postsArr = [];
     for (let key in posts) {
         postsArr.push({ post: posts[key] })

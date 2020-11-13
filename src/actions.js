@@ -6,6 +6,13 @@ function gotPosts(posts) {
     });
 }
 
+function gotDetails(post) {
+    return ({
+        type: "GET_DETAILS",
+        payload: post
+    });
+}
+
 function addPost(post) {
     return ({
         type: "ADD_POST",
@@ -13,10 +20,10 @@ function addPost(post) {
     });
 }
 
-function deletePost(key) {
+function deletePost(id) {
     return ({
         type: "DELETE_POST",
-        payload: key
+        payload: id
     });
 }
 
@@ -41,4 +48,4 @@ function deleteComment(blog, comment) {
     })
 }
 
-export { gotPosts, addPost, deletePost, editPost, addComment, deleteComment };
+export { gotPosts, gotDetails, addPost, deletePost, editPost, addComment, deleteComment };

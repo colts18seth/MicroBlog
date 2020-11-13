@@ -1,17 +1,22 @@
-import { useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addComment, deletePost, deleteComment } from './actions';
+import { deletePostCreator, getDetails } from './actionCreators';
 import { v4 as uuid } from 'uuid';
 import PostForm from './PostForm';
 import './BlogDetails.css';
 
 function BlogDetails() {
-    const { posts } = useSelector(s => ({ posts: s.posts }));
+    const history = useHistory();
     const dispatch = useDispatch();
-    const { key } = useParams();
-    const blog = posts[key - 1];
+    let { id } = useParams();
 
+    useEffect(() => {
+        dispatch(getDetails(id))
+    }, [dispatch, id]);
+
+    const { postDetails } = useSelector(s => ({ postDetails: s.postDetails }));
     const [showForm, setShowForm] = useState(false);
     const [comment, setComment] = useState("");
 
@@ -25,25 +30,27 @@ function BlogDetails() {
     };
 
     const removePost = () => {
-        dispatch(deletePost(blog.key));
+        dispatch(deletePostCreator(postDetails.id));
+        history.push("/");
     }
 
-    const addCommentFunc = () => {
-        const key = uuid();
-        dispatch(addComment(comment, key, blog));
-        setComment('');
-    }
+    // const addCommentFunc = () => {
+    //     const key = uuid();
+    //     dispatch(addComment(comment, key, blog));
+    //     setComment('');
+    // }
 
-    const removeComment = (comment) => {
-        dispatch(deleteComment(blog, comment))
-    }
+    // const removeComment = (comment) => {
+    //     dispatch(deleteComment(blog, comment))
+    // }
 
     return (
         < div className="BlogDetails" >
-            {!showForm ?
+            {postDetails &&
+                !showForm ?
                 <div className="container">
                     <div className="d-flex justify-content-between">
-                        <h3>{blog.title}</h3>
+                        <h3>{postDetails.title}</h3>
                         <div className="icons d-flex flex-row">
                             <div onClick={toggleForm}>
                                 <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" className="bi bi-pencil-square text-primary" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -58,15 +65,15 @@ function BlogDetails() {
                             </div>
                         </div>
                     </div>
-                    <p className="mb-3"><em>{blog.description}</em></p>
-                    <p>{blog.body}</p>
+                    <p className="mb-3"><em>{postDetails.description}</em></p>
+                    <p>{postDetails.body}</p>
                 </div> :
-                <PostForm edit={blog} />
+                <PostForm edit={postDetails} />
             }
             <hr />
             <div className="container">
                 <h4 className="mb-4">Comments</h4>
-                <ul>
+                {/* <ul>
                     {blog.comments &&
                         blog.comments.map(c => (
                             <li key={c.key} className="d-flex">{c.comment}
@@ -81,7 +88,7 @@ function BlogDetails() {
                 <div>
                     <input name="comment" onChange={handleChange} value={comment} placeholder="Add Comment"></input>
                     <button onClick={addCommentFunc} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
-                </div>
+                </div> */}
             </div>
         </div >
     );

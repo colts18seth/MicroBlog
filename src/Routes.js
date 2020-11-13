@@ -8,7 +8,7 @@ function Routes() {
         <Switch>
             <Route exact path='/'><BlogList /></Route>
             <Route exact path='/new'><PostForm /></Route>
-            <Route exact path='/:key'><BlogDetails />
+            <Route exact path='/:id'><BlogDetails />
             </Route>
         </Switch >
     )

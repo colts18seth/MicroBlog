@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { gotPosts, addPost } from './actions';
+import { gotPosts, addPost, editPost, gotDetails, deletePost } from './actions';
 
 const BASE_URL = "http://localhost:5000";
 
@@ -10,6 +10,13 @@ function getPosts() {
     };
 }
 
+function getDetails(id) {
+    return async function (dispatch) {
+        let res = await axios.get(`${BASE_URL}/api/posts/${id}`);
+        dispatch(gotDetails(res.data));
+    }
+}
+
 function addPostCreator(data) {
     return async function (dispatch) {
         let res = await axios.post(`${BASE_URL}/api/posts`, data);
@@ -17,4 +24,20 @@ function addPostCreator(data) {
     };
 }
 
-export { getPosts, addPostCreator };
+function editPostCreator(id, data) {
+    return async function (dispatch) {
+        let res = await axios.put(`${BASE_URL}/api/posts/${id}`, data);
+        dispatch(editPost(res.data))
+    };
+}
+
+function deletePostCreator(id) {
+    return async function (dispatch) {
+        await axios.delete(`${BASE_URL}/api/posts/${id}`)
+        dispatch(deletePost(id))
+        getPosts()
+        //! ?????
+    }
+}
+
+export { getPosts, addPostCreator, editPostCreator, getDetails, deletePostCreator };

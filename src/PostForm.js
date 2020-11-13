@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addPostCreator } from './actionCreators';
-import { editPost } from './actions';
+import { editPostCreator } from './actionCreators';
 
 function PostForm({ edit }) {
     const INITIAL_STATE = {
         title: "",
         description: "",
-        body: "",
-        comments: []
+        body: ""
     }
 
     let EDIT_INITIAL_STATE;
@@ -18,8 +17,7 @@ function PostForm({ edit }) {
             title: edit.title,
             description: edit.description,
             body: edit.body,
-            key: edit.key,
-            comments: edit.comments
+            id: edit.id
         }
     }
 
@@ -44,7 +42,7 @@ function PostForm({ edit }) {
             dispatch(addPostCreator(formData));
             setFormData(INITIAL_STATE);
         } else {
-            dispatch(editPost(formData));
+            dispatch(editPostCreator(edit.id, formData));
             setFormData(INITIAL_STATE);
         }
         history.push("/");

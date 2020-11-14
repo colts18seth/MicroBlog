@@ -6,27 +6,24 @@ import './BlogList.css';
 
 function BlogList() {
     const dispatch = useDispatch();
-    let { posts } = useSelector(s => ({ posts: s.posts }));
 
     useEffect(() => {
         dispatch(getPosts())
     }, [dispatch]);
 
-    let postsArr = [];
-    for (let key in posts) {
-        postsArr.push({ post: posts[key] })
-    }
+    let { posts } = useSelector(s => ({ posts: s.posts }));
+    const postsArr = Object.keys(posts).map(i => posts[i])
 
     return (
         <div className="BlogList row justify-content-around">
             {postsArr ?
                 postsArr.map(p => (
-                    < div key={p.post.id} className="col-5 p-0 mb-4" >
+                    < div key={p.id} className="col-5 p-0 mb-4" >
                         <div className="container border border-info rounded">
-                            <Link to={`/${p.post.id}`}>
-                                <h3>{p.post.title}</h3>
+                            <Link to={`/${p.id}`}>
+                                <h3>{p.title}</h3>
                             </Link>
-                            <p className="mb-3"><em>{p.post.description}</em></p>
+                            <p className="mb-3"><em>{p.description}</em></p>
                         </div>
                     </div>
                 )) :

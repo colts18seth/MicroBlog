@@ -34,10 +34,11 @@ function editPost(post) {
     });
 }
 
-function addComment(comment, key, blog) {
+function addComment(postId, text) {
     return ({
         type: "ADD_COMMENT",
-        payload: { comment, key, blog }
+        postId,
+        payload: text
     });
 }
 

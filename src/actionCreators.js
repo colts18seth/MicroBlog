@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { gotPosts, addPost, editPost, gotDetails, deletePost } from './actions';
+import { gotPosts, addPost, editPost, gotDetails, deletePost, addComment } from './actions';
 
 const BASE_URL = "http://localhost:5000";
 
@@ -38,4 +38,11 @@ function deletePostCreator(id) {
     }
 }
 
-export { getPosts, addPostCreator, editPostCreator, getDetails, deletePostCreator };
+function addCommentCreator(postId, text) {
+    return async function (dispatch) {
+        let res = await axios.post(`${BASE_URL}/api/posts/${postId}/comments`, text)
+        dispatch(addComment(postId, res.data))
+    }
+}
+
+export { getPosts, addPostCreator, editPostCreator, getDetails, deletePostCreator, addCommentCreator };

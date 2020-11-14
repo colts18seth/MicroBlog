@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, deletePost, deleteComment } from './actions';
-import { deletePostCreator, getDetails } from './actionCreators';
-import { v4 as uuid } from 'uuid';
+import { deleteComment } from './actions';
+import { addCommentCreator, deletePostCreator, getDetails } from './actionCreators';
 import PostForm from './PostForm';
 import './BlogDetails.css';
 
 function BlogDetails() {
     const history = useHistory();
     const dispatch = useDispatch();
-    let { id } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
         dispatch(getDetails(id))
@@ -34,15 +33,14 @@ function BlogDetails() {
         history.push("/");
     }
 
-    // const addCommentFunc = () => {
-    //     const key = uuid();
-    //     dispatch(addComment(comment, key, blog));
-    //     setComment('');
-    // }
+    const addCommentFunc = () => {
+        dispatch(addCommentCreator(postDetails.id, { text: comment }));
+        setComment('');
+    }
 
-    // const removeComment = (comment) => {
-    //     dispatch(deleteComment(blog, comment))
-    // }
+    const removeComment = (comment) => {
+        dispatch(deleteComment(comment))
+    }
 
     return (
         < div className="BlogDetails" >
@@ -73,10 +71,10 @@ function BlogDetails() {
             <hr />
             <div className="container">
                 <h4 className="mb-4">Comments</h4>
-                {/* <ul>
-                    {blog.comments &&
-                        blog.comments.map(c => (
-                            <li key={c.key} className="d-flex">{c.comment}
+                <ul>
+                    {postDetails.comments &&
+                        postDetails.comments.map(c => (
+                            <li key={c.id} className="d-flex">{c.text}
                                 <span onClick={() => removeComment(c)}>
                                     <svg width="1.8em" height="1.8em" viewBox="0 0 16 16" className="bi bi-x text-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
@@ -88,7 +86,7 @@ function BlogDetails() {
                 <div>
                     <input name="comment" onChange={handleChange} value={comment} placeholder="Add Comment"></input>
                     <button onClick={addCommentFunc} type="button" className="btn btn-primary btn-sm ml-2">Add</button>
-                </div> */}
+                </div>
             </div>
         </div >
     );

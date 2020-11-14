@@ -10,36 +10,35 @@ import {
 
 const INITIAL_STATE = {
     posts: {},
-    titles: []
+    postDetails: {}
 }
 
 function rootReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
 
         case GET_POSTS:
-            //! change from array to object
-            return { ...state, posts: action.payload }
+            const postsObj = arrayToObject(action.payload);
+            return { ...state, posts: postsObj }
 
         case GET_DETAILS:
             return { ...state, postDetails: action.payload }
 
         case ADD_POST:
-            return { ...state, posts: [...state.posts, action.payload] }
+            return { ...state, posts: { ...state.posts, [action.payload.id]: action.payload } }
 
         case EDIT_POST:
-            state.posts[action.payload.id - 1] = action.payload;
-            return { ...state }
+            return { ...state, posts: { ...state.posts, [action.payload.id]: action.payload } }
 
         case DELETE_POST:
-
-            return { ...state, }
+            const newObj = state.posts;
+            delete newObj[action.payload]
+            return { ...state, posts: { ...newObj } }
 
         case ADD_COMMENT:
-            state.posts[action.payload.blog.key].comments.push({
-                comment: action.payload.comment,
-                key: action.payload.key
-            });
-            return { ...state }
+            const id = action.postId;
+            return { ...state, posts: { ...state.posts, [id]: { ...state.posts[id], comments: [...state.posts[id].comments, action.text] } } }
+
+        //! figure this out soon plzzzz
 
         case DELETE_COMMENT:
             const index = state.posts[action.payload.blog.key].comments.findIndex(c => c.key === action.payload.comment.key)
@@ -50,5 +49,11 @@ function rootReducer(state = INITIAL_STATE, action) {
             return { ...state }
     }
 }
+
+const arrayToObject = (array) =>
+    array.reduce((obj, item) => {
+        obj[item.id] = item
+        return obj
+    }, {})
 
 export default rootReducer;

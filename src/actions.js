@@ -42,11 +42,25 @@ function addComment(postId, text) {
     });
 }
 
-function deleteComment(blog, comment) {
+function deleteComment(cID, pID) {
     return ({
         type: "DELETE_COMMENT",
-        payload: { blog, comment }
+        payload: { cID, pID }
     })
 }
 
-export { gotPosts, gotDetails, addPost, deletePost, editPost, addComment, deleteComment };
+function upVote(id) {
+    return ({
+        type: "UP_VOTE",
+        payload: id
+    })
+}
+
+function downVote(id) {
+    return ({
+        type: "DOWN_VOTE",
+        payload: id
+    })
+}
+
+export { gotPosts, gotDetails, addPost, deletePost, editPost, addComment, deleteComment, upVote, downVote };

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { gotPosts, addPost, editPost, gotDetails, deletePost, addComment } from './actions';
+import { gotPosts, addPost, editPost, gotDetails, deletePost, addComment, deleteComment, upVote, downVote } from './actions';
 
 const BASE_URL = "http://localhost:5000";
 
@@ -45,4 +45,25 @@ function addCommentCreator(postId, text) {
     }
 }
 
-export { getPosts, addPostCreator, editPostCreator, getDetails, deletePostCreator, addCommentCreator };
+function deleteCommentCreator(cID, pID) {
+    return async function (dispatch) {
+        await axios.delete(`${BASE_URL}/api/posts/${pID}/comments/${cID}`);
+        dispatch(deleteComment(cID, pID))
+    }
+}
+
+function upVoteCreator(id) {
+    return async function (dispatch) {
+        await axios.post(`${BASE_URL}/api/posts/${id}/vote/up`);
+        dispatch(upVote(id));
+    }
+}
+
+function downVoteCreator(id) {
+    return async function (dispatch) {
+        await axios.post(`${BASE_URL}/api/posts/${id}/vote/down`);
+        dispatch(downVote(id));
+    }
+}
+
+export { getPosts, addPostCreator, editPostCreator, getDetails, deletePostCreator, addCommentCreator, deleteCommentCreator, upVoteCreator, downVoteCreator };

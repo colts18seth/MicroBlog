@@ -5,7 +5,9 @@ import {
     ADD_COMMENT,
     DELETE_COMMENT,
     GET_POSTS,
-    GET_DETAILS
+    GET_DETAILS,
+    UP_VOTE,
+    DOWN_VOTE
 } from './actionTypes';
 
 const INITIAL_STATE = {
@@ -35,15 +37,43 @@ function rootReducer(state = INITIAL_STATE, action) {
             return { ...state, posts: { ...newObj } }
 
         case ADD_COMMENT:
-            const id = action.postId;
-            return { ...state, posts: { ...state.posts, [id]: { ...state.posts[id], comments: [...state.posts[id].comments, action.text] } } }
-
-        //! figure this out soon plzzzz
+            return {
+                ...state, postDetails: { ...state.postDetails, comments: [...state.postDetails.comments, action.payload] }
+            }
 
         case DELETE_COMMENT:
-            const index = state.posts[action.payload.blog.key].comments.findIndex(c => c.key === action.payload.comment.key)
-            state.posts[action.payload.blog.key].comments.splice(index, 1);
-            return { ...state }
+            const cID = action.payload.cID;
+            return {
+                ...state, postDetails: { ...state.postDetails, comments: state.postDetails.comments.filter(c => c.id !== cID) }
+            }
+
+        case UP_VOTE:
+            const uID = action.payload;
+            return {
+                ...state, posts: {
+                    ...state.posts,
+                    [uID]: {
+                        ...state.posts[uID],
+                        votes: state.posts[uID].votes + 1
+                    }
+                }, postDetails: {
+                    ...state.postDetails, votes: state.postDetails.votes + 1
+                }
+            }
+
+        case DOWN_VOTE:
+            const dID = action.payload;
+            return {
+                ...state, posts: {
+                    ...state.posts,
+                    [dID]: {
+                        ...state.posts[dID],
+                        votes: state.posts[dID].votes - 1
+                    }
+                }, postDetails: {
+                    ...state.postDetails, votes: state.postDetails.votes - 1
+                }
+            }
 
         default:
             return { ...state }
